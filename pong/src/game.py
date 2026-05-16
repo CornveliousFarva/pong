@@ -20,7 +20,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.current_level_name = "Australian Open"
+        self.current_level_name = "Classic Pong"
         self.current_level = LEVELS[self.current_level_name]
 
         self.bg_color = self.current_level["court_color"]
