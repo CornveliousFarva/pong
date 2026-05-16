@@ -8,6 +8,8 @@ class Game:
     def __init__(self) -> None:
         self.screen_width = 900
         self.screen_height = 600
+
+        self.game_mode = "human_vs_cpu"
         self.fps = 60
 
         self.screen = pygame.display.set_mode(
