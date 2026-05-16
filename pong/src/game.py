@@ -14,8 +14,26 @@ class Game:
         self.fps = 60
         self.paddle_color_index = 0
         self.ball_color_index = 0
+
+        self.left_paddle = Paddle(
+            x=30,
+            y=self.screen_height // 2 - 45,
+        )
+
+        self.right_paddle = Paddle(
+            x=self.screen_width - 44,
+            y=self.screen_height // 2 - 45,
+        )
+
+        self.ball = Ball(
+            x=self.screen_width // 2 - 8,
+            y=self.screen_height // 2 - 8,
+        )
+
+# NOW these objects exist
         self.left_paddle.color = PADDLE_COLORS[self.paddle_color_index]
         self.right_paddle.color = PADDLE_COLORS[self.paddle_color_index]
+
         self.ball.color = BALL_COLORS[self.ball_color_index]
 
         self.screen = pygame.display.set_mode(
@@ -104,32 +122,25 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                        self.load_level("Classic Pong")
-
-            elif event.key == pygame.K_2:
-                self.load_level("Australian Open")
-
-            elif event.key == pygame.K_3:
-                self.load_level("French Open")
-
-            elif event.key == pygame.K_4:
-                self.load_level("Wimbledon")
-
-            elif event.key == pygame.K_5:
-                self.load_level("US Open")
-                if event.key == pygame.K_q:
+                    self.load_level("Classic Pong")
+                elif event.key == pygame.K_2:
+                    self.load_level("Australian Open")
+                elif event.key == pygame.K_3:
+                    self.load_level("French Open")
+                elif event.key == pygame.K_4:
+                    self.load_level("Wimbledon")
+                elif event.key == pygame.K_5:
+                    self.load_level("US Open")
+                elif event.key == pygame.K_q:
                     self.previous_paddle_color()
-
-            elif event.key == pygame.K_e:
-                self.next_paddle_color()
-
-            elif event.key == pygame.K_z:
-                self.previous_ball_color()
-
-            elif event.key == pygame.K_x:
-                self.next_ball_color()
+                elif event.key == pygame.K_e:
+                    self.next_paddle_color()
+                elif event.key == pygame.K_z:
+                    self.previous_ball_color()
+                elif event.key == pygame.K_x:
+                    self.next_ball_color()
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
