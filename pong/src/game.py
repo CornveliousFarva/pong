@@ -20,8 +20,11 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.bg_color = (20, 90, 70)
-        self.line_color = (255, 255, 255)
+        self.current_level_name = "Australian Open"
+        self.current_level = LEVELS[self.current_level_name]
+
+        self.bg_color = self.current_level["court_color"]
+        self.line_color = self.current_level["line_color"]
 
         self.left_score = 0
         self.right_score = 0
