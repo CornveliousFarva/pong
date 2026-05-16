@@ -61,26 +61,32 @@ class Game:
     def update(self) -> None:
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w]:
-            self.left_paddle.move_up()
+    # Left paddle is always human
+    if keys[pygame.K_w]:
+        self.left_paddle.move_up()
 
-        if keys[pygame.K_s]:
-            self.left_paddle.move_down()
+    if keys[pygame.K_s]:
+        self.left_paddle.move_down()
 
+    # Right paddle depends on game mode
+    if self.game_mode == "human_vs_human":
         if keys[pygame.K_UP]:
             self.right_paddle.move_up()
 
         if keys[pygame.K_DOWN]:
             self.right_paddle.move_down()
 
-        self.left_paddle.keep_inside_screen(self.screen_height)
-        self.right_paddle.keep_inside_screen(self.screen_height)
+    elif self.game_mode == "human_vs_cpu":
+        self.move_cpu_paddle()
 
-        self.ball.move()
-        self.ball.keep_inside_screen(self.screen_height)
+    self.left_paddle.keep_inside_screen(self.screen_height)
+    self.right_paddle.keep_inside_screen(self.screen_height)
 
-        self.handle_collisions()
-        self.handle_scoring()
+    self.ball.move()
+    self.ball.keep_inside_screen(self.screen_height)
+
+    self.handle_collisions()
+    self.handle_scoring()
 
     def handle_collisions(self) -> None:
         if self.ball.rect.colliderect(self.left_paddle.rect):
