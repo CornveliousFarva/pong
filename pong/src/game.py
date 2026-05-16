@@ -14,6 +14,8 @@ class Game:
         self.fps = 60
         self.paddle_color_index = 0
         self.ball_color_index = 0
+        self.winning_score = 11
+        self.game_over = False
 
         self.left_paddle = Paddle(
             x=30,
@@ -157,6 +159,8 @@ class Game:
 
             if keys[pygame.K_DOWN]:
                 self.right_paddle.move_down()
+        if self.game_over:
+            return
 
         elif self.game_mode == "human_vs_cpu":
             self.move_cpu_paddle()
@@ -169,6 +173,7 @@ class Game:
 
         self.handle_collisions()
         self.handle_scoring()
+        
 
     def move_cpu_paddle(self) -> None:
         cpu_center = self.right_paddle.rect.centery
@@ -198,6 +203,14 @@ class Game:
             self.left_score += 1
             self.ball.reset(self.screen_width, self.screen_height)
 
+        if self.left_score >= self.winning_score:
+            self.game_over = True
+            self.winner = "Player 1"
+
+        elif self.right_score >= self.winning_score:
+            self.game_over = True
+            self.winner = "CPU"
+
     def draw_center_line(self) -> None:
         for y in range(0, self.screen_height, 30):
             pygame.draw.rect(
@@ -222,5 +235,6 @@ class Game:
         self.left_paddle.draw(self.screen)
         self.right_paddle.draw(self.screen)
         self.ball.draw(self.screen)
+        
 
         pygame.display.flip()
