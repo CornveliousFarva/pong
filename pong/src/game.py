@@ -23,6 +23,7 @@ class Game:
         self.current_level_name = "Classic Pong"
         self.current_level = LEVELS[self.current_level_name]
 
+
         self.bg_color = self.current_level["court_color"]
         self.line_color = self.current_level["line_color"]
 
@@ -50,6 +51,21 @@ class Game:
             speed_y=self.current_level["ball_speed"],
             color=(255, 230, 0),
         )
+    def load_level(self, level_name: str) -> None:
+        if level_name in LEVELS:
+            self.current_level_name = level_name
+            self.current_level = LEVELS[level_name]
+
+            self.bg_color = self.current_level["court_color"]
+            self.line_color = self.current_level["line_color"]
+
+            self.right_paddle.speed = self.current_level["cpu_speed"]
+            self.ball.speed_x = self.current_level["ball_speed"]
+            self.ball.speed_y = self.current_level["ball_speed"]
+
+            self.left_score = 0
+            self.right_score = 0
+            self.ball.reset(self.screen_width, self.screen_height)
 
     def run(self) -> None:
         while self.running:
@@ -62,6 +78,21 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                        self.load_level("Classic Pong")
+
+            elif event.key == pygame.K_2:
+                self.load_level("Australian Open")
+
+            elif event.key == pygame.K_3:
+                self.load_level("French Open")
+
+            elif event.key == pygame.K_4:
+                self.load_level("Wimbledon")
+
+            elif event.key == pygame.K_5:
+                self.load_level("US Open")
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
