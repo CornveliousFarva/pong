@@ -39,13 +39,15 @@ class Game:
         self.right_paddle = Paddle(
             x=self.screen_width - 44,
             y=self.screen_height // 2 - 45,
-            speed=5,
+            speed=self.current_level["cpu_speed"],
             color=(255, 255, 255),
         )
 
         self.ball = Ball(
             x=self.screen_width // 2 - 8,
             y=self.screen_height // 2 - 8,
+            speed_x=self.current_level["ball_speed"],
+            speed_y=self.current_level["ball_speed"],
             color=(255, 230, 0),
         )
 
