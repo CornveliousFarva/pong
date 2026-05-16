@@ -1,4 +1,11 @@
 LEVELS = {
+    "Classic Pong": {
+        "court_color": (0, 0, 0),
+        "line_color": (255, 255, 255),
+        "ball_speed": 5,
+        "cpu_speed": 5,
+        "description": "The classic Pong experience with balanced difficulty.",
+    },
     "Australian Open": {
         "court_color": (30, 90, 200),
         "line_color": (255, 255, 255),
@@ -27,11 +34,4 @@ LEVELS = {
         "cpu_speed": 7,
         "description": "Fast hard court. The toughest CPU challenge.",
     },
-    "Classic Pong": {
-        "court_color": (0, 0, 0),
-        "line_color": (255, 255, 255),
-        "ball_speed": 5,
-        "cpu_speed": 5,
-        "description": "The classic Pong experience with balanced difficulty.",
-    }
 }

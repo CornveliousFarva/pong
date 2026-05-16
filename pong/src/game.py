@@ -2,6 +2,7 @@ import pygame
 
 from src.entities.ball import Ball
 from src.entities.paddle import Paddle
+from src.levels import LEVELS
 
 
 class Game:
