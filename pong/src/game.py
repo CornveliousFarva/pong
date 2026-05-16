@@ -3,6 +3,7 @@ import pygame
 from src.entities.ball import Ball
 from src.entities.paddle import Paddle
 from src.levels import LEVELS
+from src.settings import PADDLE_COLORS, BALL_COLORS
 
 
 class Game:
@@ -11,6 +12,11 @@ class Game:
         self.screen_height = 600
         self.game_mode = "human_vs_cpu"
         self.fps = 60
+        self.paddle_color_index = 0
+        self.ball_color_index = 0
+        self.left_paddle.color = PADDLE_COLORS[self.paddle_color_index]
+        self.right_paddle.color = PADDLE_COLORS[self.paddle_color_index]
+        self.ball.color = BALL_COLORS[self.ball_color_index]
 
         self.screen = pygame.display.set_mode(
             (self.screen_width, self.screen_height)
@@ -73,6 +79,26 @@ class Game:
             self.update()
             self.draw()
             self.clock.tick(self.fps)
+    
+    def next_paddle_color(self) -> None:
+        self.paddle_color_index = (self.paddle_color_index + 1) % len(PADDLE_COLORS)
+        new_color = PADDLE_COLORS[self.paddle_color_index]
+        self.left_paddle.color = new_color
+        self.right_paddle.color = new_color
+
+    def previous_paddle_color(self) -> None:
+        self.paddle_color_index = (self.paddle_color_index - 1) % len(PADDLE_COLORS)
+        new_color = PADDLE_COLORS[self.paddle_color_index]
+        self.left_paddle.color = new_color
+        self.right_paddle.color = new_color
+
+    def next_ball_color(self) -> None:
+        self.ball_color_index = (self.ball_color_index + 1) % len(BALL_COLORS)
+        self.ball.color = BALL_COLORS[self.ball_color_index]
+
+    def previous_ball_color(self) -> None:
+        self.ball_color_index = (self.ball_color_index - 1) % len(BALL_COLORS)
+        self.ball.color = BALL_COLORS[self.ball_color_index]        
 
     def handle_events(self) -> None:
         for event in pygame.event.get():
@@ -93,6 +119,17 @@ class Game:
 
             elif event.key == pygame.K_5:
                 self.load_level("US Open")
+                if event.key == pygame.K_q:
+                    self.previous_paddle_color()
+
+            elif event.key == pygame.K_e:
+                self.next_paddle_color()
+
+            elif event.key == pygame.K_z:
+                self.previous_ball_color()
+
+            elif event.key == pygame.K_x:
+                self.next_ball_color()
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
