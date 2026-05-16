@@ -8,7 +8,6 @@ class Game:
     def __init__(self) -> None:
         self.screen_width = 900
         self.screen_height = 600
-
         self.game_mode = "human_vs_cpu"
         self.fps = 60
 
@@ -36,6 +35,7 @@ class Game:
         self.right_paddle = Paddle(
             x=self.screen_width - 44,
             y=self.screen_height // 2 - 45,
+            speed=5,
             color=(255, 255, 255),
         )
 
@@ -50,7 +50,6 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
-
             self.clock.tick(self.fps)
 
     def handle_events(self) -> None:
@@ -61,32 +60,40 @@ class Game:
     def update(self) -> None:
         keys = pygame.key.get_pressed()
 
-    # Left paddle is always human
-    if keys[pygame.K_w]:
-        self.left_paddle.move_up()
+        if keys[pygame.K_w]:
+            self.left_paddle.move_up()
 
-    if keys[pygame.K_s]:
-        self.left_paddle.move_down()
+        if keys[pygame.K_s]:
+            self.left_paddle.move_down()
 
-    # Right paddle depends on game mode
-    if self.game_mode == "human_vs_human":
-        if keys[pygame.K_UP]:
+        if self.game_mode == "human_vs_human":
+            if keys[pygame.K_UP]:
+                self.right_paddle.move_up()
+
+            if keys[pygame.K_DOWN]:
+                self.right_paddle.move_down()
+
+        elif self.game_mode == "human_vs_cpu":
+            self.move_cpu_paddle()
+
+        self.left_paddle.keep_inside_screen(self.screen_height)
+        self.right_paddle.keep_inside_screen(self.screen_height)
+
+        self.ball.move()
+        self.ball.keep_inside_screen(self.screen_height)
+
+        self.handle_collisions()
+        self.handle_scoring()
+
+    def move_cpu_paddle(self) -> None:
+        cpu_center = self.right_paddle.rect.centery
+        ball_center = self.ball.rect.centery
+
+        if ball_center < cpu_center:
             self.right_paddle.move_up()
 
-        if keys[pygame.K_DOWN]:
+        elif ball_center > cpu_center:
             self.right_paddle.move_down()
-
-    elif self.game_mode == "human_vs_cpu":
-        self.move_cpu_paddle()
-
-    self.left_paddle.keep_inside_screen(self.screen_height)
-    self.right_paddle.keep_inside_screen(self.screen_height)
-
-    self.ball.move()
-    self.ball.keep_inside_screen(self.screen_height)
-
-    self.handle_collisions()
-    self.handle_scoring()
 
     def handle_collisions(self) -> None:
         if self.ball.rect.colliderect(self.left_paddle.rect):
