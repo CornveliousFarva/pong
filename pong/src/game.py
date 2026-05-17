@@ -59,8 +59,68 @@ class Game:
         self.left_score = 0
         self.right_score = 0
         self.font = pygame.font.SysFont("Arial", 48)
+        self.screen_state = "menu"
+        self.title_font = pygame.font.SysFont("Arial", 64)
+        self.menu_font = pygame.font.SysFont("Arial", 32)
         
+    def draw_menu(self) -> None:
+        self.screen.fill((0, 0, 0))
 
+        title_text = self.title_font.render(
+            "Grand Slam Pong",
+            True,
+            (255, 255, 255),
+        )
+
+        option_1 = self.menu_font.render(
+            "1 - Play vs CPU",
+            True,
+            (255, 255, 255),
+        )
+
+        option_2 = self.menu_font.render(
+            "2 - Play vs Player",
+            True,
+            (255, 255, 255),
+        )
+
+        option_3 = self.menu_font.render(
+            "ESC - Quit",
+            True,
+            (255, 255, 255),
+        )
+
+        self.screen.blit(
+            title_text,
+            (
+                self.screen_width // 2 - title_text.get_width() // 2,
+                160,
+            ),
+        )
+
+        self.screen.blit(
+            option_1,
+            (
+                self.screen_width // 2 - option_1.get_width() // 2,
+                280,
+            ),
+        )
+
+        self.screen.blit(
+            option_2,
+            (
+                self.screen_width // 2 - option_2.get_width() // 2,
+                330,
+            ),
+        )
+
+        self.screen.blit(
+            option_3,
+            (
+                self.screen_width // 2 - option_3.get_width() // 2,
+                400,
+            ),
+        )
     def load_level(self, level_name: str) -> None:
         if level_name in LEVELS:
             self.current_level_name = level_name
@@ -106,31 +166,63 @@ class Game:
 
     def handle_events(self) -> None:
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 self.running = False
+
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    self.load_level("Classic Pong")
-                elif event.key == pygame.K_2:
-                    self.load_level("Australian Open")
-                elif event.key == pygame.K_3:
-                    self.load_level("French Open")
-                elif event.key == pygame.K_4:
-                    self.load_level("Wimbledon")
-                elif event.key == pygame.K_5:
-                    self.load_level("US Open")
-                elif event.key == pygame.K_q:
-                    self.previous_paddle_color()
-                elif event.key == pygame.K_e:
-                    self.next_paddle_color()
-                elif event.key == pygame.K_z:
-                    self.previous_ball_color()
-                elif event.key == pygame.K_x:
-                    self.next_ball_color()
-                elif event.key == pygame.K_SPACE and self.game_over:
-                    self.reset_game()
+
+                if self.screen_state == "menu":
+                    if event.key == pygame.K_1:
+                        self.game_mode = "human_vs_cpu"
+                        self.screen_state = "playing"
+                        self.reset_game()
+
+                    elif event.key == pygame.K_2:
+                        self.game_mode = "human_vs_human"
+                        self.screen_state = "playing"
+                        self.reset_game()
+
+                    elif event.key == pygame.K_ESCAPE:
+                        self.running = False
+
+                elif self.screen_state == "playing":
+                    if event.key == pygame.K_1:
+                        self.load_level("Classic Pong")
+
+                    elif event.key == pygame.K_2:
+                        self.load_level("Australian Open")
+
+                    elif event.key == pygame.K_3:
+                        self.load_level("French Open")
+
+                    elif event.key == pygame.K_4:
+                        self.load_level("Wimbledon")
+
+                    elif event.key == pygame.K_5:
+                        self.load_level("US Open")
+
+                    elif event.key == pygame.K_q:
+                        self.previous_paddle_color()
+
+                    elif event.key == pygame.K_e:
+                        self.next_paddle_color()
+
+                    elif event.key == pygame.K_z:
+                        self.previous_ball_color()
+
+                    elif event.key == pygame.K_x:
+                        self.next_ball_color()
+
+                    elif event.key == pygame.K_SPACE and self.game_over:
+                        self.reset_game()
+
+                    elif event.key == pygame.K_m:
+                        self.screen_state = "menu"
 
     def update(self) -> None:
+        if self.screen_state != "menu": 
+            return
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]:
@@ -217,6 +309,11 @@ class Game:
         self.screen.blit(right_text, (self.screen_width // 2 + 60, 30))
 
     def draw(self) -> None:
+        if self.screen_state == "menu":
+            self.draw_menu()
+        pygame.display.flip()
+        return
+
         self.screen.fill(self.bg_color)
 
         self.draw_center_line()
