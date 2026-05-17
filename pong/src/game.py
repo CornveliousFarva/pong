@@ -230,12 +230,15 @@ class Game:
                     elif event.key == pygame.K_x:
                         self.next_ball_color()
 
+                    # Added a new menu navigation option that allows players to return to the main menu by pressing the "M" key during gameplay. This provides a convenient way for players to exit the current game and access the menu options without having to quit the game entirely, allowing them to easily switch between different game modes, levels, or customize their settings.     
+
                     elif event.key == pygame.K_ESCAPE:
                         self.screen_state = "menu"
 
+                    #  Added a new restart functionality that allows players to restart the game by pressing the spacebar when the game is over. This provides a quick and convenient way for players to start a new game without having to navigate back to the menu, allowing them to jump right back into the action after a match ends.
                     elif event.key == pygame.K_SPACE and self.game_over:
                         self.reset_game()
-
+                    # Added a new pause functionality that allows players to pause the game by pressing the "P" key during gameplay. When the "P" key is pressed, the screen state changes to "pause", which can be used to implement a pause menu or simply freeze the game state until the player decides to resume. This provides players with the ability to take breaks or attend to other tasks without losing their progress in the game.
                     elif event.key == pygame.K_p:
                         self.screen_state = "pause"
                     
