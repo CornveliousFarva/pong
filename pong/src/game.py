@@ -229,6 +229,15 @@ class Game:
 
                     elif event.key == pygame.K_x:
                         self.next_ball_color()
+
+                    elif event.key == pygame.K_ESCAPE:
+                        self.screen_state = "menu"
+
+                    elif event.key == pygame.K_SPACE and self.game_over:
+                        self.reset_game()
+
+                    elif event.key == pygame.K_p:
+                        self.screen_state = "pause"
                     
 # This method is responsible for updating the game state each frame. It handles player input, moves the paddles and ball, checks for collisions, and updates the score. It also checks for game over conditions and determines the winner when the game ends.
     def update(self) -> None:
