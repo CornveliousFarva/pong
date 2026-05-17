@@ -58,29 +58,7 @@ class Game:
         self.left_score = 0
         self.right_score = 0
         self.font = pygame.font.SysFont("Arial", 48)
-
-        self.left_paddle = Paddle(
-            x=30,
-            y=self.screen_height // 2 - 45,
-            color=(255, 255, 255),
-        )
-
-        self.right_paddle = Paddle(
-            x=self.screen_width - 44,
-            y=self.screen_height // 2 - 45,
-            speed=self.current_level["cpu_speed"],
-            color=(255, 255, 255),
-        )
-
-        self.ball = Ball(
-            x=self.screen_width // 2 - 8,
-            y=self.screen_height // 2 - 8,
-            speed_x=self.current_level["ball_speed"],
-            speed_y=self.current_level["ball_speed"],
-            color=(255, 230, 0),
-        )
-        if self.game_over:
-            self.winner = "Player 1" if self.left_score > self.right_score else "CPU"
+        
 
     def load_level(self, level_name: str) -> None:
         if level_name in LEVELS:
@@ -149,9 +127,7 @@ class Game:
                 elif event.key == pygame.K_x:
                     self.next_ball_color()
                 elif event.key == pygame.K_SPACE and self.game_over:
-                    self.load_level(self.current_level_name)
-                    self.game_over = False
-                    self.winner = ""
+                    self.reset_game()
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
@@ -219,10 +195,10 @@ class Game:
         elif self.right_score >= self.winning_score:
             if self.game_mode == "human_vs_human":
                 self.winner = "Player 2"
-            if self.game_mode == "human_vs_cpu":
+            else:
                 self.winner = "CPU"
-            self.game_over = True
-            self.winner = "CPU"
+
+        self.game_over = True
 
     def draw_center_line(self) -> None:
         for y in range(0, self.screen_height, 30):
@@ -248,6 +224,11 @@ class Game:
         self.left_paddle.draw(self.screen)
         self.right_paddle.draw(self.screen)
         self.ball.draw(self.screen)
+
+        if self.game_over:
+            self.draw_game_over()
+
+    pygame.display.flip()
     
     def draw_game_over(self) -> None:
         if self.game_over:
@@ -262,7 +243,7 @@ class Game:
             self.screen.blit(game_over_text, (self.screen_width // 2 - game_over_text.get_width() // 2, self.screen_height // 2 - 60))
             self.screen.blit(winner_text, (self.screen_width // 2 - winner_text.get_width() // 2, self.screen_height // 2 + 10))
 
-    def reseet_game(self) -> None:
+    def reset_game(self) -> None:
         self.left_score = 0
         self.right_score = 0
         self.ball.reset(self.screen_width, self.screen_height)
