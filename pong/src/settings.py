@@ -4,7 +4,7 @@ FPS = 60
 
 WINNING_SCORE = 11
 
-
+# Paddle Colors
 PADDLE_COLORS = [
     (255, 255, 255),  # White
     (255, 0, 0),      # Red
@@ -14,6 +14,7 @@ PADDLE_COLORS = [
     (255, 215, 0),    # Gold
 ]
 
+# Ball Colors
 BALL_COLORS = [
     (255, 230, 0),    # Tennis yellow
     (255, 255, 255),  # White

@@ -89,7 +89,7 @@ class Game:
             True,
             (255, 255, 255),
         )
-
+        # Added a new title for the main menu, "Grand Slam Pong", which is rendered using a larger font and blitted onto the screen at the top center. This title provides a clear and visually appealing introduction to the game when players first launch it, setting the tone for the tennis-themed Pong experience.
         self.screen.blit(
             title_text,
             (
@@ -97,7 +97,7 @@ class Game:
                 160,
             ),
         )
-
+        # 
         self.screen.blit(
             option_1,
             (
@@ -105,7 +105,7 @@ class Game:
                 280,
             ),
         )
-
+        # Added a new menu option for human vs human mode, allowing players to choose between playing against the CPU or competing against another player on the same machine. This option is rendered as text and blitted onto the screen below the "Play vs CPU" option, providing a clear choice for players who want to play with a friend instead of against the computer.
         self.screen.blit(
             option_2,
             (
@@ -113,7 +113,7 @@ class Game:
                 330,
             ),
         )
-
+        # Added a new menu option for quitting the game, allowing players to easily exit the game from the main menu by pressing the "ESC" key. This option is rendered as text and blitted onto the screen below the other menu options, providing a clear and accessible way for players to quit the game if they choose not to play.
         self.screen.blit(
             option_3,
             (
@@ -121,6 +121,8 @@ class Game:
                 400,
             ),
         )
+
+    # This method is responsible for loading a specific level based on the provided level name. It checks if the level name exists in the LEVELS dictionary, and if it does, it updates the current level settings such as background color, line color, ball speed, and CPU paddle speed according to the selected level. It also resets the scores and positions of the ball and paddles to start fresh with the new level settings.
     def load_level(self, level_name: str) -> None:
         if level_name in LEVELS:
             self.current_level_name = level_name
@@ -136,53 +138,55 @@ class Game:
             self.left_score = 0
             self.right_score = 0
             self.ball.reset(self.screen_width, self.screen_height)
-
+    # This method is responsible for running the main game loop. It continuously checks for events, updates the game state, and redraws the screen at a consistent frame rate defined by self.fps. The loop continues until the self.running flag is set to False, which typically happens when the player chooses to quit the game.
     def run(self) -> None:
         while self.running:
             self.handle_events()
             self.update()
             self.draw()
             self.clock.tick(self.fps)
-    
+    # This method is responsible for changing the paddle's color to the next color in the PADDLE_COLORS list. It increments the paddle_color_index and uses modulo to wrap around if it exceeds the length of the PADDLE_COLORS list, ensuring that the index stays within the valid range of colors. After updating the index, it sets the paddles' color to the new color from the PADDLE_COLORS list based on the updated index.
     def next_paddle_color(self) -> None:
         self.paddle_color_index = (self.paddle_color_index + 1) % len(PADDLE_COLORS)
         new_color = PADDLE_COLORS[self.paddle_color_index]
         self.left_paddle.color = new_color
         self.right_paddle.color = new_color
-
+    # This method is responsible for changing the paddle's color to the previous color in the PADDLE_COLORS list. It decrements the paddle_color_index and uses modulo to wrap around if it goes below zero, ensuring that the index stays within the valid range of colors. After updating the index, it sets the paddles' color to the new color from the PADDLE_COLORS list based on the updated index.
     def previous_paddle_color(self) -> None:
         self.paddle_color_index = (self.paddle_color_index - 1) % len(PADDLE_COLORS)
         new_color = PADDLE_COLORS[self.paddle_color_index]
         self.left_paddle.color = new_color
         self.right_paddle.color = new_color
-
+    # This method is responsible for changing the ball's color to the next color in the BALL_COLORS list. It increments the ball_color_index and uses modulo to wrap around if it exceeds the length of the BALL_COLORS list, ensuring that the index stays within the valid range of colors. After updating the index, it sets the ball's color to the new color from the BALL_COLORS list based on the updated index.
     def next_ball_color(self) -> None:
         self.ball_color_index = (self.ball_color_index + 1) % len(BALL_COLORS)
         self.ball.color = BALL_COLORS[self.ball_color_index]
 
+    # This method is responsible for changing the ball's color to the previous color in the BALL_COLORS list. It decrements the ball_color_index and uses modulo to wrap around if it goes below zero, ensuring that the index stays within the valid range of colors. After updating the index, it sets the ball's color to the new color from the BALL_COLORS list based on the updated index.
     def previous_ball_color(self) -> None:
         self.ball_color_index = (self.ball_color_index - 1) % len(BALL_COLORS)
         self.ball.color = BALL_COLORS[self.ball_color_index]        
 
+# This method is responsible for handling all the events that occur during the game, such as quitting the game, navigating the menu, selecting game modes, switching levels, and changing colors. It listens for specific key presses to trigger these actions, allowing players to interact with the game and customize their experience. For example, pressing "1" or "2" in the menu starts a new game in either human vs CPU or human vs human mode, while pressing "M" during gameplay returns to the menu. Additionally, players can switch between different levels and customize paddle and ball colors using designated keys.
     def handle_events(self) -> None:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 self.running = False
-
+# 
             elif event.type == pygame.KEYDOWN:
-
+                # Handle menu navigation and game mode selection
                 if self.screen_state == "menu":
                     if event.key == pygame.K_1:
                         self.game_mode = "human_vs_cpu"
                         self.screen_state = "playing"
                         self.reset_game()
-
+                    # Added option for human vs human mode in the menu, allowing two players to compete against each other on the same machine. This is triggered by pressing the "2" key, which sets the game mode to "human_vs_human", changes the screen state to "playing", and resets the game to start fresh.
                     elif event.key == pygame.K_2:
                         self.game_mode = "human_vs_human"
                         self.screen_state = "playing"
                         self.reset_game()
-
+                    # 
                     elif event.key == pygame.K_ESCAPE:
                         self.running = False
                 # Allow returning to menu or restarting game on space if game over
@@ -226,10 +230,7 @@ class Game:
                     elif event.key == pygame.K_x:
                         self.next_ball_color()
                     
-
-
-
-
+# This method is responsible for updating the game state each frame. It handles player input, moves the paddles and ball, checks for collisions, and updates the score. It also checks for game over conditions and determines the winner when the game ends.
     def update(self) -> None:
         if self.screen_state == "menu":
             return
@@ -264,7 +265,7 @@ class Game:
         self.handle_collisions()
         self.handle_scoring()
         
-
+# This method is responsible for moving the CPU-controlled paddle. It compares the vertical center of the ball with the vertical center of the CPU paddle and moves the paddle up or down accordingly to try to keep it aligned with the ball's position. This simple AI allows the CPU to effectively track and respond to the ball's movement during gameplay.
     def move_cpu_paddle(self) -> None:
         cpu_center = self.right_paddle.rect.centery
         ball_center = self.ball.rect.centery
@@ -275,6 +276,7 @@ class Game:
         elif ball_center > cpu_center:
             self.right_paddle.move_down()
 
+#  This method is responsible for handling collisions between the ball and the paddles. It checks if the ball's rectangle collides with either the left or right paddle's rectangle. If a collision is detected, it adjusts the ball's position to prevent it from getting stuck inside the paddle and calls the bounce_x() method to reverse the ball's horizontal direction, simulating a bounce off the paddle.
     def handle_collisions(self) -> None:
         if self.ball.rect.colliderect(self.left_paddle.rect):
             self.ball.rect.left = self.left_paddle.rect.right
@@ -284,6 +286,7 @@ class Game:
             self.ball.rect.right = self.right_paddle.rect.left
             self.ball.bounce_x()
 
+# 
     def handle_scoring(self) -> None:
         if self.ball.rect.right < 0:
             self.right_score += 1
@@ -305,6 +308,7 @@ class Game:
 
             self.game_over = True
 
+#  This method is responsible for drawing the game elements on the screen each frame. It first checks the current screen state; if it's in the menu, it calls the draw_menu() method to render the menu and then updates the display. If the game is in the playing state, it fills the background with the court color, draws the center line, and renders the current score. It then calls the draw() method on both paddles and the ball to render them on the screen. If the game is over, it calls draw_game_over() to display the game over screen with the winner and restart instructions. Finally, it updates the display to show all the drawn elements.
     def draw_center_line(self) -> None:
         for y in range(0, self.screen_height, 30):
             pygame.draw.rect(
@@ -312,7 +316,7 @@ class Game:
                 self.line_color,
                 pygame.Rect(self.screen_width // 2 - 2, y, 4, 18),
             )
-
+# This method is responsible for drawing the current score of both players on the screen. It uses the font object to render the left and right scores as text surfaces, which are then blitted onto the screen at specific positions near the top center. The left player's score is displayed to the left of the center line, while the right player's score is displayed to the right of the center line, allowing players to easily see their current scores during gameplay.
     def draw_score(self) -> None:
         left_text = self.font.render(str(self.left_score), True, self.line_color)
         right_text = self.font.render(str(self.right_score), True, self.line_color)
@@ -320,6 +324,7 @@ class Game:
         self.screen.blit(left_text, (self.screen_width // 2 - 90, 30))
         self.screen.blit(right_text, (self.screen_width // 2 + 60, 30))
 
+# This method is responsible for drawing the game over screen when the game has ended. It creates a semi-transparent black overlay to dim the background and then renders the "Game Over" text along with the winner's name. It also displays instructions for restarting the game by pressing the spacebar. The text is centered on the screen to ensure it is prominently displayed to the player when the game ends.
     def draw(self) -> None:
         if self.screen_state == "menu":
             self.draw_menu()
@@ -338,7 +343,8 @@ class Game:
             self.draw_game_over()
 
         pygame.display.flip()
-    
+
+    # This method is responsible for drawing the game over screen when the game has ended. It creates a semi-transparent black overlay to dim the background and then renders the "Game Over" text along with the winner's name. It also displays instructions for restarting the game by pressing the spacebar. The text is centered on the screen to ensure it is prominently displayed to the player when the game ends.
     def draw_game_over(self) -> None:
         if self.game_over:
             overlay = pygame.Surface((self.screen_width, self.screen_height))
@@ -364,7 +370,7 @@ class Game:
                     self.screen_height // 2 + 80,
                 ),
             )
-
+# This method is responsible for resetting the game state when the game is over. It initializes the scores to zero, sets the game over flag to False, and resets the ball and paddles to their starting positions.
     def reset_game(self) -> None:
         self.left_score = 0
         self.right_score = 0
