@@ -185,19 +185,58 @@ class Game:
 
                     elif event.key == pygame.K_ESCAPE:
                         self.running = False
-
+                # Allow returning to menu or restarting game on space if game over
                 elif self.screen_state == "playing":
+
+                    # Return to menu
                     if event.key == pygame.K_m:
                         self.screen_state = "menu"
 
+                    # Restart after game over
                     elif event.key == pygame.K_SPACE and self.game_over:
                         self.reset_game()
+
+                    # Level switching
+                    elif event.key == pygame.K_1:
+                        self.load_level("Classic Pong")
+
+                    elif event.key == pygame.K_2:
+                        self.load_level("Australian Open")
+
+                    elif event.key == pygame.K_3:
+                        self.load_level("French Open")
+
+                    elif event.key == pygame.K_4:
+                        self.load_level("Wimbledon")
+
+                    elif event.key == pygame.K_5:
+                        self.load_level("US Open")
+
+                    # Paddle colors
+                    elif event.key == pygame.K_q:
+                        self.previous_paddle_color()
+
+                    elif event.key == pygame.K_e:
+                        self.next_paddle_color()
+
+                    # Ball colors
+                    elif event.key == pygame.K_z:
+                        self.previous_ball_color()
+
+                    elif event.key == pygame.K_x:
+                        self.next_ball_color()
+                    
+
 
 
 
     def update(self) -> None:
-        if self.screen_state != "menu": 
+        if self.screen_state == "menu":
             return
+
+        if self.game_over:
+            return
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_w]:
@@ -212,8 +251,6 @@ class Game:
 
             if keys[pygame.K_DOWN]:
                 self.right_paddle.move_down()
-        if self.game_over:
-            return
 
         elif self.game_mode == "human_vs_cpu":
             self.move_cpu_paddle()
