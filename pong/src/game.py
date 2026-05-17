@@ -8,6 +8,9 @@ from src.settings import PADDLE_COLORS, BALL_COLORS
 
 class Game:
     def __init__(self) -> None:
+        self.game_over = False
+        self.winner = ""
+        self.winning_score = 11
         self.screen_width = 900
         self.screen_height = 600
         self.game_mode = "human_vs_cpu"
@@ -15,9 +18,7 @@ class Game:
         self.paddle_color_index = 0
         self.ball_color_index = 0
         self.winning_score = 11
-        self.game_over = False
-        self.winner = ""
-        self.winning_score = 11
+       
 
         self.left_paddle = Paddle(
             x=30,
@@ -198,7 +199,7 @@ class Game:
             else:
                 self.winner = "CPU"
 
-        self.game_over = True
+            self.game_over = True
 
     def draw_center_line(self) -> None:
         for y in range(0, self.screen_height, 30):
@@ -228,7 +229,7 @@ class Game:
         if self.game_over:
             self.draw_game_over()
 
-    pygame.display.flip()
+        pygame.display.flip()
     
     def draw_game_over(self) -> None:
         if self.game_over:
@@ -242,17 +243,28 @@ class Game:
 
             self.screen.blit(game_over_text, (self.screen_width // 2 - game_over_text.get_width() // 2, self.screen_height // 2 - 60))
             self.screen.blit(winner_text, (self.screen_width // 2 - winner_text.get_width() // 2, self.screen_height // 2 + 10))
+            restart_text = pygame.font.SysFont("Arial", 28).render(
+                "Press SPACE to restart",
+                True,
+                (255, 255, 255),
+            )
+
+            self.screen.blit(
+                restart_text,
+                (
+                    self.screen_width // 2 - restart_text.get_width() // 2,
+                    self.screen_height // 2 + 80,
+                ),
+            )
 
     def reset_game(self) -> None:
         self.left_score = 0
         self.right_score = 0
-        self.ball.reset(self.screen_width, self.screen_height)
+
         self.game_over = False
         self.winner = ""
 
-        self.ball.reset(
-            self.screen_width,
-            self.screen_height,
-        )
+        self.ball.reset(self.screen_width,self.screen_height)
 
-        pygame.display.flip()
+        self.left_paddle.rect.centery = self.screen_height // 2
+        self.right_paddle.rect.centery = self.screen_height // 2
