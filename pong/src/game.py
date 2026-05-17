@@ -187,38 +187,13 @@ class Game:
                         self.running = False
 
                 elif self.screen_state == "playing":
-                    if event.key == pygame.K_1:
-                        self.load_level("Classic Pong")
-
-                    elif event.key == pygame.K_2:
-                        self.load_level("Australian Open")
-
-                    elif event.key == pygame.K_3:
-                        self.load_level("French Open")
-
-                    elif event.key == pygame.K_4:
-                        self.load_level("Wimbledon")
-
-                    elif event.key == pygame.K_5:
-                        self.load_level("US Open")
-
-                    elif event.key == pygame.K_q:
-                        self.previous_paddle_color()
-
-                    elif event.key == pygame.K_e:
-                        self.next_paddle_color()
-
-                    elif event.key == pygame.K_z:
-                        self.previous_ball_color()
-
-                    elif event.key == pygame.K_x:
-                        self.next_ball_color()
+                    if event.key == pygame.K_m:
+                        self.screen_state = "menu"
 
                     elif event.key == pygame.K_SPACE and self.game_over:
                         self.reset_game()
 
-                    elif event.key == pygame.K_m:
-                        self.screen_state = "menu"
+
 
     def update(self) -> None:
         if self.screen_state != "menu": 
@@ -311,11 +286,10 @@ class Game:
     def draw(self) -> None:
         if self.screen_state == "menu":
             self.draw_menu()
-        pygame.display.flip()
-        return
+            pygame.display.flip()
+            return
 
         self.screen.fill(self.bg_color)
-
         self.draw_center_line()
         self.draw_score()
 
